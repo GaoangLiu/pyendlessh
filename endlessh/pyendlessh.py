@@ -22,7 +22,7 @@ logging.getLogger("paramiko").setLevel(logging.ERROR)
 
 logger = Logger(logname='/tmp/endlessh.log')
 logger.level = 'INFO'
-
+import timeit
 
 def generate_private_key() -> str:
     os.system("echo 'y'|ssh-keygen -q -t rsa -N '' -f /tmp/key_honeyport")
@@ -90,6 +90,7 @@ class BasicSshHoneypot(paramiko.ServerInterface):
             return paramiko.AUTH_PARTIALLY_SUCCESSFUL
 
     def check_auth_password(self, username, password):
+        logger.info(username, password)
         with SleepTimer(random.randint(self.min, self.max)) as timer:
             logger.info('client {} tried ({}, {})'.format(self.client_ip,
                                                           username, password))
