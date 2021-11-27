@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="endlessh",
-    version="0.0.4",
+    version="0.0.4dev3",
     author="slipper",
     author_email="r2fscg@gmail.com",
     description="SSH honeypot implemented with Python",
