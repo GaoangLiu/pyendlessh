@@ -2,9 +2,9 @@ import argparse
 import asyncio
 import random
 import timeit
-
+import requests
 from codefast.logger import Logger
-
+from contextlib import suppress
 logger = Logger(logname='/tmp/endlessh.log')
 logger.level = 'INFO'
 
@@ -16,6 +16,15 @@ class Hosts:
     def sort_by_time(cls):
         return sorted(cls.peer.items(), key=lambda p: p[1])
 
+    @classmethod
+    def get_location(cls,ip: str) -> str:
+        '''Returns the location of the ip address'''
+        url = 'https://ipinfo.io/' + ip + '/json'
+        with suppress(Exception):
+            resp = requests.get(url).json()
+            return "{}, {}".format(resp['city'], resp['region'])
+        return 'location unknown'
+
 
 async def handler(_reader, writer):
     try:
@@ -25,7 +34,8 @@ async def handler(_reader, writer):
                 map(str, _reader._transport.get_extra_info('peername')))
             if peer not in Hosts.peer:
                 Hosts.peer[peer] = timeit.default_timer()
-                logger.info('connection from peer {}'.format(peer))
+                loc=Hosts.get_location(peer.split(':')[0])
+                logger.info('connection from peer {}, {}'.format(peer, loc))
             writer.write(b'%x\r\n' % random.randint(0, 2**32))
             await writer.drain()
     except ConnectionResetError:
