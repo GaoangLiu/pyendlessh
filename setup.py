@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="endlessh",
-    version="0.0.5",
+    version="0.0.5dev3",
     author="slipper",
     author_email="r2fscg@gmail.com",
     description="SSH honeypot implemented with Python",
@@ -13,8 +13,10 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/GaoangLiu/pyendlessh",
     packages=setuptools.find_packages(),
-    install_requires=['codefast', 'paramiko', 'argparse'],
-    entry_points={'console_scripts': ['endlessh=endlessh.async_endlessh:endlessh']},
+    install_requires=['codefast', 'paramiko', 'argparse', 'colorama'],
+    entry_points={
+        'console_scripts': ['endlessh=endlessh.async_endlessh:endlessh']
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
